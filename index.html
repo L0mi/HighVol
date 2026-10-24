@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>HighVol</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/highvol-icon.png">
+  <link rel="apple-touch-icon" href="assets/highvol-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <section id="welcome" class="screen welcome-screen hidden" aria-labelledby="welcome-title">
+      <div class="welcome-content">
+        <img class="brand-mark" src="assets/highvol-icon.png" alt="HighVol logo">
+        <p class="eyebrow">LOMISOUP STUDIOS</p>
+        <h1 id="welcome-title">HighVol</h1>
+        <p class="tagline">Keep the rally. Delete the downtime.</p>
+        <div class="permission-list">
+          <article><span class="permission-icon">◉</span><div><strong>Camera</strong><p>Records the match and keeps a temporary rolling buffer.</p></div></article>
+          <article><span class="permission-icon">♪</span><div><strong>Microphone</strong><p>Adds court audio when Audio Recording is enabled.</p></div></article>
+          <article><span class="permission-icon">↓</span><div><strong>Device storage</strong><p>Keeps highlights privately in this browser and lets you download them.</p></div></article>
+        </div>
+        <p class="fine-print">HighVol asks before using your camera and microphone. Your videos stay on this device unless you download or share them.</p>
+        <button id="welcome-continue" class="button primary wide">CONTINUE</button>
+      </div>
+    </section>
+
+    <section id="record-screen" class="screen camera-screen hidden" aria-label="Record">
+      <video id="camera-preview" autoplay muted playsinline></video>
+      <div class="camera-shade"></div>
+      <div id="camera-placeholder" class="camera-placeholder">
+        <img src="assets/highvol-icon.png" alt="">
+        <h2>Camera preview</h2>
+        <p>Allow camera access to start recording volleyball highlights.</p>
+        <button id="enable-camera" class="button primary">ENABLE CAMERA</button>
+      </div>
+
+      <div class="record-layout">
+        <header class="status-card glass">
+          <div class="status-line"><span id="record-dot" class="record-dot"></span><strong id="status-message">Camera is off</strong><span class="spacer"></span><span id="fps-badge" class="badge">— FPS</span></div>
+          <div id="recording-detail" class="recording-detail hidden"><span id="recording-state">Ready</span><span id="recording-timer">00:00</span></div>
+        </header>
+
+        <section class="controls-card glass">
+          <div class="match-fields">
+            <label><span>Match name</span><input id="match-name" value="Match" maxlength="60"></label>
+            <label class="match-number"><span>Number</span><input id="match-number" type="number" value="1" min="1" max="99"></label>
+          </div>
+
+          <fieldset>
+            <legend>Recording mode</legend>
+            <div class="segmented three" id="mode-picker">
+              <button class="active" data-mode="manual">Manual</button>
+              <button data-mode="automatic">Auto</button>
+              <button data-mode="full">Full</button>
+            </div>
+            <p id="mode-description" class="help">Keep a rolling buffer and save only the rally you choose.</p>
+          </fieldset>
+
+          <fieldset id="length-fieldset">
+            <legend>Highlight length</legend>
+            <div class="segmented five" id="length-picker">
+              <button class="active" data-length="15">15s</button><button data-length="30">30s</button><button data-length="45">45s</button><button data-length="60">60s</button><button data-length="90">90s</button>
+            </div>
+          </fieldset>
+
+          <button id="save-highlight" class="button primary wide" disabled>⚡ SAVE HIGHLIGHT</button>
+          <button id="toggle-recording" class="button secondary wide" disabled>● START RECORDING</button>
+          <div class="control-row">
+            <button id="switch-camera" class="button quiet" aria-label="Switch to front camera">↻ Use front camera</button>
+            <button id="review-latest" class="button quiet hidden">▶ Review latest</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="library-screen" class="screen content-screen hidden" aria-labelledby="library-title">
+      <header class="page-header"><div><p class="eyebrow">YOUR SAVED MOMENTS</p><h1 id="library-title">Highlights</h1></div><button id="clear-library" class="text-button danger">Clear all</button></header>
+      <div id="library-empty" class="empty-state"><div class="empty-icon">⚡</div><h2>No highlights yet</h2><p>Record a match to create automatic chunks, save a rally manually, or keep a full recording.</p><button class="button primary" data-go="record">START RECORDING</button></div>
+      <div id="clip-grid" class="clip-grid"></div>
+    </section>
+
+    <section id="settings-screen" class="screen content-screen hidden" aria-labelledby="settings-title">
+      <header class="page-header"><div><p class="eyebrow">HIGHVOL WEB</p><h1 id="settings-title">Settings</h1></div></header>
+      <div class="settings-stack">
+        <section class="settings-card"><h2>Recording</h2>
+          <label class="toggle-row"><span><strong>Record game audio</strong><small>Add court sound to each recording.</small></span><input id="setting-audio" type="checkbox" checked></label>
+          <label class="select-row"><span><strong>Preferred frame rate</strong><small>The browser and camera choose the closest supported rate.</small></span><select id="setting-fps"><option value="30">30 FPS</option><option value="60" selected>60 FPS</option><option value="120">120 FPS</option></select></label>
+          <label class="select-row"><span><strong>Default recording mode</strong></span><select id="setting-mode"><option value="manual">Manual</option><option value="automatic">Auto</option><option value="full">Full</option></select></label>
+          <label class="select-row"><span><strong>Default highlight length</strong></span><select id="setting-length"><option>15</option><option>30</option><option>45</option><option>60</option><option>90</option></select></label>
+        </section>
+        <section class="settings-card"><h2>Storage & privacy</h2><p>Only highlights you save are kept. Clips are stored locally in this browser using IndexedDB and are never sent to a server by HighVol.</p><div class="storage-line"><span>Saved on this device</span><strong id="storage-used">0 clips</strong></div></section>
+        <section class="settings-card"><h2>Browser permissions</h2><p id="permission-summary">Camera access has not been checked yet.</p><button id="request-permissions" class="button secondary">CHECK CAMERA & MICROPHONE</button></section>
+        <section class="settings-card"><h2>Install HighVol</h2><p>Add HighVol to your Home Screen for a full-screen app experience. On iPhone, open Safari’s Share menu and choose <strong>Add to Home Screen</strong>.</p><button id="install-app" class="button primary hidden">INSTALL APP</button></section>
+        <section class="settings-card about-card"><img src="assets/highvol-icon.png" alt="HighVol"><div><h2>HighVol</h2><p>Web version 1.0 · LomiSoup Studios</p><small>You choose the great rallies, then mark your favorite as Best Highlight.</small></div></section>
+      </div>
+    </section>
+
+    <nav id="tab-bar" class="tab-bar hidden" aria-label="Main navigation">
+      <button class="active" data-screen="record"><span>●</span>Record</button>
+      <button data-screen="library"><span>▣</span>Highlights</button>
+      <button data-screen="settings"><span>⚙</span>Settings</button>
+    </nav>
+  </main>
+
+  <dialog id="editor-dialog" class="editor-dialog">
+    <form method="dialog"><button class="dialog-close" aria-label="Close">×</button></form>
+    <div id="editor-content"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>

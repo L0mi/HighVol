@@ -1,0 +1,13 @@
+{
+  "name": "HighVol Volleyball Highlights",
+  "short_name": "HighVol",
+  "description": "Record volleyball matches and keep only the highlights you choose.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090b0f",
+  "theme_color": "#090b0f",
+  "orientation": "any",
+  "icons": [
+    {"src": "assets/highvol-icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
